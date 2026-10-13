@@ -1,0 +1,148 @@
+FIFA WORLD CUP 2026 — COMPLETE PROJECT VALIDATION
+This report checks internal consistency, dataset structure, and features.
+It does not independently authenticate every match result.
+
+===========================================================================
+1. REQUIRED FILES
+===========================================================================
+[PASS] File exists: data/raw/worldcup2026.json
+[PASS] File exists: data/raw/world_cup_matches_downloaded.csv
+[PASS] File exists: data/raw/international_results.csv
+[PASS] File exists: data/processed/matches_with_pre_match_features_audit.csv
+[PASS] File exists: data/processed/regression_2_1.csv
+[PASS] File exists: data/processed/regression_2_2.csv
+[PASS] File exists: src/collect_and_prepare.py
+
+===========================================================================
+2. RAW WORLD CUP SOURCE VALIDATION
+===========================================================================
+[PASS] JSON has 104 match records
+       Found 104
+[PASS] Downloaded CSV has 104 rows
+       Found 104
+[PASS] Unique match IDs
+       Unique IDs: 104
+[PASS] No missing match IDs
+[PASS] No missing teams or dates
+[PASS] No missing scores
+[PASS] No negative scores
+[PASS] Goal differences calculated correctly
+[PASS] All JSON records have full-time scores
+       Scored JSON records: 104
+[PASS] JSON and CSV match records agree
+       JSON records: 104; CSV records: 104
+
+===========================================================================
+3. REGRESSION DATASET REQUIREMENTS
+===========================================================================
+[PASS] Model 2.1 has 104 rows
+       Rows: 104
+[PASS] Model 2.2 has 208 rows
+       Rows: 208
+[PASS] Model 2.1 has 8 predictors
+       Predictors: ['recent_gf_avg_diff', 'recent_ga_avg_diff_reversed', 'recent_win_rate_diff', 'recent_goal_diff_avg_diff', 'rest_days_diff', 'host_advantage_diff', 'knockout_stage', 'recent_points_avg_diff']
+[PASS] Model 2.2 has 8 predictors
+       Predictors: ['recent_gf_avg', 'recent_ga_avg', 'recent_win_rate', 'recent_goal_diff_avg', 'recent_points_avg', 'rest_days', 'host_team_indicator', 'knockout_stage']
+[PASS] Model 2.1 target exists
+[PASS] Model 2.2 target exists
+[PASS] Model 2.1 has no duplicate match IDs
+[PASS] Model 2.2 has 104 unique match IDs
+       Unique IDs: 104
+[PASS] Model 2.2 has exactly two rows per match
+[PASS] Model 2.2 team rows have distinct teams
+
+===========================================================================
+4. MISSING VALUES AND TARGET VALIDATION
+===========================================================================
+[PASS] Model 2.1: no missing predictor/target values
+       Missing cells: 0
+[PASS] Model 2.1: all predictors and target are numeric
+       Numeric columns: 9/9
+[PASS] Model 2.1: all predictor/target values are finite
+[PASS] Model 2.2: no missing predictor/target values
+       Missing cells: 0
+[PASS] Model 2.2: all predictors and target are numeric
+       Numeric columns: 9/9
+[PASS] Model 2.2: all predictor/target values are finite
+[PASS] Model 2.1 goal differences are within score-derived bounds
+       Observed range: -4 to 6
+[PASS] Model 2.2 goals scored are non-negative integers
+       Observed range: 0 to 7
+
+===========================================================================
+5. TARGET CONSISTENCY
+===========================================================================
+[PASS] Model 2.1 target matches audit data
+[PASS] Model 2.2 targets match audit data
+
+===========================================================================
+6. SHARED PREDICTORS
+===========================================================================
+Model 2.1 predictor names: ['recent_gf_avg_diff', 'recent_ga_avg_diff_reversed', 'recent_win_rate_diff', 'recent_goal_diff_avg_diff', 'rest_days_diff', 'host_advantage_diff', 'knockout_stage', 'recent_points_avg_diff']
+Model 2.2 predictor names: ['recent_gf_avg', 'recent_ga_avg', 'recent_win_rate', 'recent_goal_diff_avg', 'recent_points_avg', 'rest_days', 'host_team_indicator', 'knockout_stage']
+Identical column names shared: ['knockout_stage']
+Intended shared concepts: ['Recent goals scored', 'Recent goals conceded', 'Recent win rate', 'Recent goal difference']
+Intended shared concept count: 4
+[PASS] No more than four intended shared concepts
+
+===========================================================================
+7. FEATURE SANITY CHECKS
+===========================================================================
+[PASS] a_recent_win_rate lies between 0 and 1
+[PASS] b_recent_win_rate lies between 0 and 1
+[PASS] host_a is binary
+       Values: [0, 1]
+[PASS] host_b is binary
+       Values: [0, 1]
+[PASS] knockout_stage is binary
+       Values: [0, 1]
+[PASS] Raw team rest days are non-negative
+Model 2.1 rest_days_diff range: -70 to 6
+Note: a negative difference is valid if team A had fewer rest days.
+
+===========================================================================
+8. HISTORICAL COVERAGE AND LEAKAGE REVIEW
+===========================================================================
+[PASS] All 208 team-match observations checked
+       Observations: 208
+[PASS] Every team has at least five previous recorded matches
+       Minimum prior-record count: 235
+[PASS] Historical matches used are dated before prediction date
+[PASS] Feature-generation code uses a strict earlier-date cutoff
+       Static code check; does not independently recalculate every feature.
+
+===========================================================================
+9. FEATURE CONSTRUCTION CONSISTENCY
+===========================================================================
+[PASS] Audit dataset contains required feature columns
+       Missing: []
+[PASS] Model 2.1 feature arithmetic: recent_gf_avg_diff
+[PASS] Model 2.1 feature arithmetic: recent_ga_avg_diff_reversed
+[PASS] Model 2.1 feature arithmetic: recent_win_rate_diff
+[PASS] Model 2.1 feature arithmetic: recent_goal_diff_avg_diff
+[PASS] Model 2.1 feature arithmetic: rest_days_diff
+[PASS] Model 2.1 feature arithmetic: host_advantage_diff
+[PASS] Model 2.1 feature arithmetic: recent_points_avg_diff
+[PASS] Model 2.2 predictors agree with audit features
+
+===========================================================================
+10. LIMITATIONS TO RECORD
+===========================================================================
+Host indicator is based on host-nation identity: True
+It is NOT a verified stadium-level home-advantage variable.
+Historical coverage counts do not prove all matches were recorded.
+Matching JSON and CSV does not independently authenticate match scores.
+The current checks do not assess model accuracy; no model was trained.
+
+===========================================================================
+11. OVERALL VALIDATION SUMMARY
+===========================================================================
+Checks passed: 57
+Checks requiring review: 0
+
+OVERALL RESULT: ALL AUTOMATED CHECKS PASSED
+
+IMPORTANT:
+This is an internal data-quality report, not proof that every
+World Cup match record is independently authentic.
+Review any failed checks before fitting regression models.

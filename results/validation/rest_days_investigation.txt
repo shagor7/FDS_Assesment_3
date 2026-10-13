@@ -1,0 +1,29 @@
+======================================================================
+REST-DAY INVESTIGATION
+======================================================================
+
+Match ID: 44
+Match date: 2026-06-15
+Team: Uruguay
+Reported rest days: 76
+Previous recorded match: 2026-03-31 00:00:00
+Calculated rest days: 76
+Historical matches before cutoff: 974
+
+Match ID: 56
+Match date: 2026-06-16
+Team: Austria
+Reported rest days: 15
+Previous recorded match: 2026-06-01 00:00:00
+Calculated rest days: 15
+Historical matches before cutoff: 860
+
+Match ID: 68
+Match date: 2026-06-17
+Team: Ghana
+Reported rest days: 15
+Previous recorded match: 2026-06-02 00:00:00
+Calculated rest days: 15
+Historical matches before cutoff: 671
+
+Investigation complete.

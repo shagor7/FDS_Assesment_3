@@ -1,0 +1,128 @@
+168-
+169-    return history.sort_values(
+170-        ["date", "team"]
+171-    ).reset_index(drop=True)
+172-
+173:def team_history_features(history, team, cutoff, n=5):
+174-    # Strictly earlier dates only, avoiding use of same-day outcomes when exact
+175-    # kickoff timestamps are not consistently available in the historical source.
+176:    prior = history[(history["team"] == team) & (history["date"] < cutoff)].tail(n)
+177-    if prior.empty:
+178-        return {
+179:            "recent_gf_avg": None, "recent_ga_avg": None,
+180:            "recent_win_rate": None, "recent_points_avg": None,
+181:            "recent_goal_diff_avg": None, "rest_days": None
+182-        }
+183-    previous_date = prior["date"].max()
+184-    return {
+185:        "recent_gf_avg": prior["gf"].mean(),
+186:        "recent_ga_avg": prior["ga"].mean(),
+187:        "recent_win_rate": prior["win"].mean(),
+188:        "recent_points_avg": prior["points"].mean(),
+189:        "recent_goal_diff_avg": (prior["gf"] - prior["ga"]).mean(),
+190:        "rest_days": (cutoff - previous_date).days
+191-    }
+192-
+193:def is_host(team, venue):
+194-    # Simple host-country proxy. Team names are normalised for common naming.
+195-    t = str(team).strip().lower()
+196-    v = str(venue).strip().lower()
+197-    if t in {"canada", "mexico", "usa", "united states"}:
+198-        return 1
+199-    return 0
+200-
+201-def main():
+202-    matches = read_world_cup()
+203-    history = read_international()
+204-    matches.to_csv(RAW / "world_cup_matches_downloaded.csv", index=False)
+205-    print(f"World Cup rows with scores: {len(matches)}")
+206-    if len(matches) != 104:
+207-        print("WARNING: Expected 104 completed matches; source returned a different count.")
+208-        print("Check the source file, unresolved placeholders, and score fields before proceeding.")
+209-    if matches[["team_a", "team_b", "date"]].isna().any().any():
+210-        raise ValueError("Missing team/date values in World Cup data.")
+211-
+212-    rows = []
+213-    for m in matches.itertuples(index=False):
+214-        cutoff = m.date
+215-        a = team_history_features(history, m.team_a, cutoff)
+216-        b = team_history_features(history, m.team_b, cutoff)
+217-        stage_text = str(m.round).lower()
+218-        knockout = int(any(x in stage_text for x in
+219-                           ["round of", "quarter", "semi", "final", "third place"]))
+220-        # The host flag is defined at national-team level; venue is not assumed
+221-        # to mean the national team is playing at home.
+222-        host_a, host_b = is_host(m.team_a, m.venue), is_host(m.team_b, m.venue)
+223-        rows.append({
+224-            **m._asdict(),
+225:            "a_recent_gf_avg": a["recent_gf_avg"], "b_recent_gf_avg": b["recent_gf_avg"],
+226:            "a_recent_ga_avg": a["recent_ga_avg"], "b_recent_ga_avg": b["recent_ga_avg"],
+227:            "a_recent_win_rate": a["recent_win_rate"], "b_recent_win_rate": b["recent_win_rate"],
+228:            "a_recent_points_avg": a["recent_points_avg"], "b_recent_points_avg": b["recent_points_avg"],
+229:            "a_recent_goal_diff_avg": a["recent_goal_diff_avg"], "b_recent_goal_diff_avg": b["recent_goal_diff_avg"],
+230:            "a_rest_days": a["rest_days"], "b_rest_days": b["rest_days"],
+231-            "host_a": host_a, "host_b": host_b, "knockout_stage": knockout
+232-        })
+233-    enriched = pd.DataFrame(rows)
+234-
+235-    # Model 2.1: exactly eight predictors; four difference features plus rest,
+236-    # host, stage, and recent points difference.
+237-    model21 = pd.DataFrame({
+238-        "match_id": enriched["match_id"],
+239-        "date": enriched["date"],
+240-        "team_a": enriched["team_a"],
+241-        "team_b": enriched["team_b"],
+242:        "recent_gf_avg_diff": enriched["a_recent_gf_avg"] - enriched["b_recent_gf_avg"],
+243:        "recent_ga_avg_diff_reversed": enriched["b_recent_ga_avg"] - enriched["a_recent_ga_avg"],
+244:        "recent_win_rate_diff": enriched["a_recent_win_rate"] - enriched["b_recent_win_rate"],
+245:        "recent_goal_diff_avg_diff": enriched["a_recent_goal_diff_avg"] - enriched["b_recent_goal_diff_avg"],
+246:        "rest_days_diff": enriched["a_rest_days"] - enriched["b_rest_days"],
+247-        "host_advantage_diff": enriched["host_a"] - enriched["host_b"],
+248-        "knockout_stage": enriched["knockout_stage"],
+249:        "recent_points_avg_diff": enriched["a_recent_points_avg"] - enriched["b_recent_points_avg"],
+250-        "goal_difference": enriched["goal_difference"]
+251-    })
+252-
+253-    # Model 2.2: one row per team per match. Four concepts shared with 2.1:
+254-    # recent GF, recent GA, recent win rate, and recent goal difference.
+255-    team_rows = []
+256-    for m in enriched.itertuples(index=False):
+257-        for side in ("a", "b"):
+258-            team_rows.append({
+259-                "match_id": m.match_id, "date": m.date,
+260-                "team": getattr(m, f"team_{side}"),
+261-                "opponent": getattr(m, "team_b" if side == "a" else "team_a"),
+262:                "recent_gf_avg": getattr(m, f"{side}_recent_gf_avg"),
+263:                "recent_ga_avg": getattr(m, f"{side}_recent_ga_avg"),
+264:                "recent_win_rate": getattr(m, f"{side}_recent_win_rate"),
+265:                "recent_goal_diff_avg": getattr(m, f"{side}_recent_goal_diff_avg"),
+266:                "recent_points_avg": getattr(m, f"{side}_recent_points_avg"),
+267:                "rest_days": getattr(m, f"{side}_rest_days"),
+268-                "host_team_indicator": getattr(m, f"host_{side}"),
+269-                "knockout_stage": m.knockout_stage,
+270-                "goals_scored": getattr(m, f"goals_{side}")
+271-            })
+272-    model22 = pd.DataFrame(team_rows)
+273-
+274-    model21.to_csv(OUT / "regression_2_1.csv", index=False)
+275-    model22.to_csv(OUT / "regression_2_2.csv", index=False)
+276-    enriched.to_csv(OUT / "matches_with_pre_match_features_audit.csv", index=False)
+277-
+278-    print("\n--- Validation summary ---")
+279-    print("Model 2.1 rows:", len(model21), "| expected 104")
+280-    print("Model 2.1 predictors:", 8)
+281-    print("Model 2.2 rows:", len(model22), "| expected 208")
+282-    print("Model 2.2 predictors:", 8)
+283-    print("Model 2.1 missing values in predictors:")
+284-    print(model21.iloc[:, 4:12].isna().sum())
+285-    print("Model 2.2 missing values in predictors:")
+286-    print(model22.iloc[:, 4:12].isna().sum())
+287-    print("\nFiles written to:", OUT)
+288-    print("Review missing values, host coding, stage coding, source provenance, and score rules before modelling.")
+289-
+290-if __name__ == "__main__":
+291-    try:
+292-        main()
+293-    except Exception as exc:
+294-        print(f"ERROR: {exc}", file=sys.stderr)
+295-        raise

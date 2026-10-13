@@ -1,0 +1,15 @@
+Task 2.2 — Goals scored model comparison
+Evaluation: out-of-fold predictions from 5-fold GroupKFold grouped by match_id.
+Metrics are computed across all out-of-fold predictions; values may differ from mean fold metrics.
+
+            model    mae   rmse      r2  rows  unique_matches                            cv
+Ridge (alpha=100) 1.0462 1.3632  0.0272   208             104 5-fold GroupKFold by match_id
+ Ridge (alpha=10) 1.0647 1.3742  0.0113   208             104 5-fold GroupKFold by match_id
+  Ridge (alpha=1) 1.0825 1.3847 -0.0037   208             104 5-fold GroupKFold by match_id
+Ridge (alpha=0.1) 1.0910 1.3906 -0.0124   208             104 5-fold GroupKFold by match_id
+Linear Regression 1.0924 1.3916 -0.0139   208             104 5-fold GroupKFold by match_id
+    Mean baseline 1.0952 1.3880 -0.0086   208             104 5-fold GroupKFold by match_id
+
+Predictors: recent_gf_avg, recent_ga_avg, recent_win_rate, recent_goal_diff_avg, recent_points_avg, rest_days, host_team_indicator, knockout_stage
+Target: goals_scored
+Caution: cross-validation performance is exploratory; verify data provenance and predictor restrictions.

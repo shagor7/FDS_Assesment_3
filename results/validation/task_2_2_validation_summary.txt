@@ -1,0 +1,11 @@
+Task 2.2 dataset checks
+=======================
+Expected rows: 208
+Observed rows: 208
+Unique matches: 104
+Rows per match: exactly 2
+Target: goals_scored
+Explanatory variables: 8
+Missing values in predictors/target: 0 (according to included dataset checks)
+
+These checks validate structure and internal consistency only. They do not independently authenticate every World Cup result or prove the source dataset is complete. Review the source data and the shared-predictor requirement alongside Task 2.1 before assessment submission.

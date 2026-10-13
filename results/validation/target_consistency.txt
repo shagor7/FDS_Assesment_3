@@ -1,0 +1,11 @@
+TARGET CONSISTENCY CHECK
+============================================================
+Model 2.1 target matches source: True
+Model 2.1 mismatches: 0
+
+Model 2.2 has two rows per match: True
+Matches with incorrect row counts: 0
+Model 2.2 targets match source: True
+Model 2.2 mismatches: 0
+
+Report complete.

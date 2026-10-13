@@ -1,0 +1,51 @@
+======================================================================
+1. WORLD CUP JSON INSPECTION
+======================================================================
+Top-level type: dict
+Top-level keys: ['name', 'matches']
+Match records found: 104
+
+JSON record 1:
+{"round": "Matchday 1", "date": "2026-06-11", "time": "13:00 UTC-6", "team1": "Mexico", "team2": "South Africa", "score": {"ft": [2, 0], "ht": [1, 0]}, "goals1": [{"name": "Julián Quiñones", "minute": "9"}, {"name": "Raúl Jiménez", "minute": "67"}], "goals2": [], "group": "Group A", "ground": "Mexico City"}
+
+JSON record 2:
+{"round": "Matchday 1", "date": "2026-06-11", "time": "20:00 UTC-6", "team1": "South Korea", "team2": "Czech Republic", "score": {"ft": [2, 1], "ht": [0, 0]}, "goals1": [{"name": "Hwang In-Beom", "minute": "67"}, {"name": "Oh Hyeon-Gyu", "minute": "80"}], "goals2": [{"name": "Ladislav Krejcí", "minute": "59"}], "group": "Group A", "ground": "Guadalajara (Zapopan)"}
+
+JSON record 3:
+{"round": "Matchday 8", "date": "2026-06-18", "time": "12:00 UTC-4", "team1": "Czech Republic", "team2": "South Africa", "score": {"ft": [1, 1], "ht": [1, 0]}, "goals1": [{"name": "Michal Sadílek", "minute": "6"}], "goals2": [{"name": "Teboho Mokoena", "minute": "83", "penalty": true}], "group": "Group A", "ground": "Atlanta"}
+
+JSON record 4:
+{"round": "Matchday 8", "date": "2026-06-18", "time": "19:00 UTC-6", "team1": "Mexico", "team2": "South Korea", "score": {"ft": [1, 0], "ht": [0, 0]}, "goals1": [{"name": "Luis Romo", "minute": "50"}], "goals2": [], "group": "Group A", "ground": "Guadalajara (Zapopan)"}
+
+JSON record 5:
+{"round": "Matchday 14", "date": "2026-06-24", "time": "19:00 UTC-6", "team1": "Czech Republic", "team2": "Mexico", "score": {"ft": [0, 3], "ht": [0, 0]}, "goals1": [], "goals2": [{"name": "Mateo Chávez", "minute": "55"}, {"name": "Julián Quiñones", "minute": "61"}, {"name": "Álvaro Fidalgo", "minute": "90+4"}], "group": "Group A", "ground": "Mexico City"}
+
+======================================================================
+2. DOWNLOADED CSV INSPECTION
+======================================================================
+Shape: (104, 11)
+Columns: ['match_id', 'date', 'round', 'group', 'team_a', 'team_b', 'goals_a', 'goals_b', 'venue', 'source_time', 'goal_difference']
+
+First five records:
+ match_id       date      round   group      team_a               team_b  goals_a  goals_b                                venue source_time  goal_difference
+        1 2026-06-11 Matchday 1 Group A      Mexico         South Africa        2        0                          Mexico City 13:00 UTC-6                2
+        2 2026-06-11 Matchday 1 Group A South Korea       Czech Republic        2        1                Guadalajara (Zapopan) 20:00 UTC-6                1
+        7 2026-06-12 Matchday 2 Group B      Canada Bosnia & Herzegovina        1        1                              Toronto 15:00 UTC-4                0
+       19 2026-06-12 Matchday 2 Group D         USA             Paraguay        4        1              Los Angeles (Inglewood) 18:00 UTC-7                3
+        8 2026-06-13 Matchday 3 Group B       Qatar          Switzerland        1        1 San Francisco Bay Area (Santa Clara) 12:00 UTC-7                0
+
+======================================================================
+3. HISTORICAL RESULTS INSPECTION
+======================================================================
+Shape: (49945, 9)
+Columns: ['date', 'home_team', 'away_team', 'home_score', 'away_score', 'tournament', 'city', 'country', 'neutral']
+
+Last five records:
+      date                home_team            away_team  home_score  away_score              tournament           city                      country  neutral
+2026-10-06                   Belize        French Guiana           0           1 CONCACAF Nations League       Belmopan                       Belize    False
+2026-10-06 Turks and Caicos Islands           Montserrat           1           4 CONCACAF Nations League Providenciales     Turks and Caicos Islands    False
+2026-10-06      Antigua and Barbuda                Aruba           3           2 CONCACAF Nations League    North Sound          Antigua and Barbuda    False
+2026-10-06             Saint Martin              Bahamas           6           0 CONCACAF Nations League    Saint Croix United States Virgin Islands     True
+2026-10-06             Saudi Arabia United Arab Emirates           2           0                Gulf Cup         Jeddah                 Saudi Arabia    False
+
+Inspection complete.

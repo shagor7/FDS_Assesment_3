@@ -1,0 +1,28 @@
+=================================================================
+WORLD CUP SOURCE VALIDATION
+=================================================================
+JSON match count: 104
+CSV row count: 104
+CSV unique match IDs: 104
+Duplicate CSV match IDs: 0
+
+JSON records with valid full-time scores: 104
+Records in JSON but not CSV: 0
+Records in CSV but not JSON: 0
+
+Goal-difference arithmetic check:
+All CSV goal differences correct: True
+
+Date range:
+First: 2026-06-11
+Last:  2026-07-19
+
+Score sanity checks:
+Negative goals: 0
+Missing scores: 0
+
+Overall result:
+PASS
+
+Note: matching JSON and CSV confirms internal consistency,
+not independent verification of every real-world match result.

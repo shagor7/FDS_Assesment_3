@@ -1,0 +1,32 @@
+
+Team: USA
+Exact match: False
+Possible matches: []
+
+Team: United States
+Exact match: True
+Possible matches: ['United States', 'United States Virgin Islands']
+
+Team: Bosnia & Herzegovina
+Exact match: False
+Possible matches: []
+
+Team: Bosnia and Herzegovina
+Exact match: True
+Possible matches: ['Bosnia and Herzegovina']
+
+Team: Canada
+Exact match: True
+Possible matches: ['Canada']
+
+Team: Paraguay
+Exact match: True
+Possible matches: ['Paraguay']
+
+Team: Australia
+Exact match: True
+Possible matches: ['Australia', 'Western Australia']
+
+Team: Belgium
+Exact match: True
+Possible matches: ['Belgium']

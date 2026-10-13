@@ -1,0 +1,15 @@
+TOTAL TEAM-MATCH OBSERVATIONS: 208
+OBSERVATIONS WITH AT LEAST FIVE PRIOR RECORDS: 208
+OBSERVATIONS WITH FEWER THAN FIVE PRIOR RECORDS: 0
+
+OBSERVATIONS WITH FEWER THAN FIVE PRIOR RECORDS:
+Empty DataFrame
+Columns: [match_id, date, team, historical_matches, at_least_five, latest_prior_match]
+Index: []
+
+TEAM-MATCH OBSERVATIONS WITH FEWER THAN 10 PRIOR RECORDS:
+Empty DataFrame
+Columns: [match_id, date, team, historical_matches, at_least_five, latest_prior_match]
+Index: []
+
+HISTORICAL COVERAGE VALIDATION COMPLETE

@@ -1,0 +1,49 @@
+=================================================================
+PRE-MATCH PREDICTOR VALIDATION
+=================================================================
+
+1. DATE CHECK
+Audit: 2026-06-11 00:00:00 to 2026-07-19 00:00:00
+  Invalid dates: 0
+Model 2.1: 2026-06-11 00:00:00 to 2026-07-19 00:00:00
+  Invalid dates: 0
+Model 2.2: 2026-06-11 00:00:00 to 2026-07-19 00:00:00
+  Invalid dates: 0
+
+2. PREDICTOR COUNTS
+Model 2.1: 8
+Model 2.2: 8
+Intended shared concepts: 4
+Shared concepts: ['recent goal difference average', 'recent goals conceded average', 'recent goals scored average', 'recent win rate']
+
+3. BINARY FEATURE VALUES
+Model 2.1 - host_advantage_diff: [-1, 0, 1]
+Model 2.1 - knockout_stage: [0, 1]
+Model 2.2 - host_team_indicator: [0, 1]
+Model 2.2 - knockout_stage: [0, 1]
+
+4. REST-DAY CHECK
+Audit - a_rest_days: min=4, max=15, negative=0
+Audit - b_rest_days: min=3, max=76, negative=0
+Model 2.1 - rest_days_diff: min=-70, max=6, negative=14
+Model 2.2 - rest_days: min=3, max=76, negative=0
+
+5. MODEL 2.1 FEATURE ARITHMETIC
+recent_gf_avg_diff: matches audit arithmetic = True
+recent_ga_avg_diff_reversed: matches audit arithmetic = True
+recent_win_rate_diff: matches audit arithmetic = True
+recent_goal_diff_avg_diff: matches audit arithmetic = True
+rest_days_diff: matches audit arithmetic = True
+host_advantage_diff: matches audit arithmetic = True
+recent_points_avg_diff: matches audit arithmetic = True
+
+6. MODEL 2.2 MATCH ROW COUNTS
+Every match has two rows: True
+Incorrect match row counts: 0
+
+NOTE:
+This script checks structural properties and arithmetic only.
+It does not independently prove source authenticity or rule out
+future-data leakage in historical feature generation.
+
+Validation report complete.

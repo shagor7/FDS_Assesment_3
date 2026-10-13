@@ -1,0 +1,38 @@
+
+=======================================================
+data/processed/regression_2_1.csv
+Rows: 104
+
+Missing values:
+match_id                       0
+date                           0
+team_a                         0
+team_b                         0
+recent_gf_avg_diff             0
+recent_ga_avg_diff_reversed    0
+recent_win_rate_diff           0
+recent_goal_diff_avg_diff      0
+rest_days_diff                 0
+host_advantage_diff            0
+knockout_stage                 0
+recent_points_avg_diff         0
+goal_difference                0
+
+=======================================================
+data/processed/regression_2_2.csv
+Rows: 208
+
+Missing values:
+match_id                0
+date                    0
+team                    0
+opponent                0
+recent_gf_avg           0
+recent_ga_avg           0
+recent_win_rate         0
+recent_goal_diff_avg    0
+recent_points_avg       0
+rest_days               0
+host_team_indicator     0
+knockout_stage          0
+goals_scored            0
